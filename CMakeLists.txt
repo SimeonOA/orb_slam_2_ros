@@ -168,6 +168,11 @@ install(TARGETS orb_slam2_ros_core DBoW2 g2o
   RUNTIME DESTINATION bin
 )
 
+install(PROGRAMS
+  ros/scripts/client.py
+  DESTINATION lib/${PROJECT_NAME}/ros/scripts
+)
+
 install(DIRECTORY ros/launch/
   DESTINATION share/${PROJECT_NAME}/ros/launch
 )

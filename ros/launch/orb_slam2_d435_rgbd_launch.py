@@ -45,8 +45,8 @@ def generate_launch_description():
                  "use_sim_time": use_sim_time},
             ],
             package='orb_slam2_ros',
-            node_executable='orb_slam2_ros_rgbd',
-            node_name='orb_slam2_rgbd',
+            executable='orb_slam2_ros_rgbd',
+            name='orb_slam2_rgbd',
             output='screen',
             remappings=remappings
         )

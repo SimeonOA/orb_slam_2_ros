@@ -1,10 +1,11 @@
-FROM ros:rolling-ros-core
+FROM ros:rolling-ros-core-focal
 
 # Update
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
   build-essential \
   software-properties-common \
+  python3-pip \
   python3-colcon-common-extensions \
   libboost-serialization-dev \
   libeigen3-dev \
@@ -14,6 +15,8 @@ RUN apt-get update && \
   ros-rolling-image-transport-plugins \
   ros-rolling-cv-bridge \
 && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m pip install --no-cache-dir numpy autolab_core
 
 # copy source
 ENV ROS2_WS /opt/ros2_ws
