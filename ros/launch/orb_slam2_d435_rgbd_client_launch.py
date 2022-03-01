@@ -26,70 +26,73 @@ launch_args = [
         description='Full path to vocabulary file to use'),
 
     DeclareLaunchArgument("compress", default_value="0"),
+    DeclareLaunchArgument("fps", default_value="20"),
+    DeclareLaunchArgument("dataset")
 ]
 
 def launch_setup(context):
     compress = LaunchConfiguration("compress").perform(context)
     if compress == "1":
-        img_transport_in = "compressed"
-        img_transport_in_remap = "in/compressed"
-        img_transport_params = [{"in.format": "png"}, {"in.png_level": 9}]
+        img_transport_out = "compressed"
+        img_transport_out_remap = "out/compressed"
+        img_transport_params = [{"out.format": "png"}, {"out.png_level": 9}]
     elif compress == "2":
-        img_transport_in = "h264"
-        img_transport_in_remap = "in/h264"
+        img_transport_out = "h264"
+        img_transport_out_remap = "out/h264"
         img_transport_params = []
     else:
-        img_transport_in = "raw"
-        img_transport_in_remap = "in"
+        img_transport_out = "raw"
+        img_transport_out_remap = "out"
         img_transport_params = []
 
-    orb_slam2_rgbd_node = Node(
+    client_args = ["--dataset", LaunchConfiguration("dataset").perform(context)]
+    client_args.extend(
+        ["--fps", LaunchConfiguration("fps").perform(context)]
+    )
+
+    orb_slam2_rgbd_client = Node(
         parameters=[
             LaunchConfiguration("params_file"),
             {"voc_file": LaunchConfiguration("voc_file"),
             "use_sim_time": LaunchConfiguration("use_sim_time")},
         ],
         package="orb_slam2_ros",
-        executable="orb_slam2_ros_rgbd",
+        executable="client.py",
         output="screen",
-        name="orb_slam2_ros_rgbd",
-        remappings = [
-            ('/camera/rgb/image_raw', '/camera/color/image'),
-            ('/camera/depth_registered/image_raw', '/camera/depth/image_rect'),
-            ('/camera/camera_info', '/camera/color/camera_info'),
-        ]
+        name="orb_slam2_ros_rgbd_client",
+        arguments=client_args,
     )
     
     rgb_repub_node = Node(
         package="image_transport",
-        name="rgb_repub_node",
+        name="rgb_repub_client",
         executable="republish",
         arguments=[
-            img_transport_in,  # Input
-            "raw",  # Output
+            "raw",  # Input
+            img_transport_out,  # Output
         ],
         remappings=[
-            (img_transport_in_remap, "/camera/color/image_compressed"),
-            ("out", "/camera/color/image"),
+            ("in", "/camera/color/image_raw"),
+            (img_transport_out_remap, "/camera/color/image_compressed"),
         ],
         parameters=img_transport_params
     )
     depth_repub_node = Node(
         package="image_transport",
-        name="depth_repub_node",
+        name="depth_repub_client",
         executable="republish",
         arguments=[
-            img_transport_in,  # Output
             "raw",  # Input
+            img_transport_out,  # Output
         ],
         remappings=[
-            (img_transport_in_remap, "/camera/depth/image_rect_compressed"),
-            ("out", "/camera/depth/image_rect"),
+            ("in", "/camera/depth/image_rect_raw"),
+            (img_transport_out_remap, "/camera/depth/image_rect_compressed"),
         ],
         parameters=img_transport_params
     )
 
-    return[orb_slam2_rgbd_node, rgb_repub_node, depth_repub_node]
+    return[orb_slam2_rgbd_client, rgb_repub_node, depth_repub_node]
 
 def generate_launch_description():
     opfunc = OpaqueFunction(function=launch_setup)

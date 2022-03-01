@@ -170,7 +170,7 @@ install(TARGETS orb_slam2_ros_core DBoW2 g2o
 
 install(PROGRAMS
   ros/scripts/client.py
-  DESTINATION lib/${PROJECT_NAME}/ros/scripts
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 install(DIRECTORY ros/launch/

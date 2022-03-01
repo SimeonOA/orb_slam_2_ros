@@ -96,13 +96,20 @@ if __name__ == "__main__":
         default=None,
         help="path to image files",
     )
+    parser.add_argument(
+        "--fps",
+        type=int,
+        default=20,
+        help="fps for publishing frames"
+    )
 
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
     dataset = args.dataset
+    fps = args.fps
 
     # Initialize the ROS node.
     rclpy.init()
-    client = SLAMClient(dataset, 20)
+    client = SLAMClient(dataset, fps)
 
     rclpy.spin_until_future_complete(client, client.future)
     client.destroy_node()
