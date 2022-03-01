@@ -7,7 +7,7 @@ docker run --rm -it -v /home/gdpmobile7/rgbd_dataset_freiburg1_xyz:/dataset -v $
 docker run -it --rm mjd3/orbslam-ros ros2 launch orb_slam2_ros orb_slam2_d435_rgbd_launch.py compress:=0
 ```
 
-
+Results for processing time (`proc_times.npy`) and round-trip times (`rt_times.npy`) can be found in the specified output folder.
 
 # ORB-SLAM2
 **ORB-SLAM2 Authors:** [Raul Mur-Artal](http://webdiis.unizar.es/~raulmur/), [Juan D. Tardos](http://webdiis.unizar.es/~jdtardos/), [J. M. M. Montiel](http://webdiis.unizar.es/~josemari/) and [Dorian Galvez-Lopez](http://doriangalvez.com/) ([DBoW2](https://github.com/dorian3d/DBoW2)).
