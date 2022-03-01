@@ -14,6 +14,14 @@ RUN apt-get update && \
   ros-rolling-image-common \
   ros-rolling-image-transport-plugins \
   ros-rolling-cv-bridge \
+  libswscale-dev \
+  libavdevice-dev \
+  libavformat-dev \
+  libavcodec-dev \
+  libavutil-dev \
+  libx264-dev \
+  libogg-dev \
+  libtheora-dev \
 && rm -rf /var/lib/apt/lists/*
 
 RUN python3 -m pip install --no-cache-dir numpy autolab_core
@@ -23,6 +31,7 @@ ENV ROS2_WS /opt/ros2_ws
 RUN mkdir -p $ROS2_WS/src/orb_slam_2_ros
 WORKDIR $ROS2_WS/src
 COPY [ ".", "orb_slam_2_ros/" ]
+RUN mv orb_slam_2_ros/extern/* ./
 
 # build source
 WORKDIR $ROS2_WS

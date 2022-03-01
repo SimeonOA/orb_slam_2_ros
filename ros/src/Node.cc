@@ -122,16 +122,16 @@ void Node::Update()
   cv::Mat position = orb_slam_->GetCurrentPosition();
 
   if (!position.empty()) {
-    PublishPositionAsTransform(position);
+    // PublishPositionAsTransform(position);
     if (publish_pose_param_) {
       PublishPositionAsPoseStamped(position);
     }
   }
 
-  PublishRenderedImage(orb_slam_->DrawCurrentFrame());
-  if (publish_pointcloud_param_) {
-    PublishMapPoints(orb_slam_->GetAllMapPoints());
-  }
+  // PublishRenderedImage(orb_slam_->DrawCurrentFrame());
+  // if (publish_pointcloud_param_) {
+  //   PublishMapPoints(orb_slam_->GetAllMapPoints());
+  // }
 }
 
 void Node::PublishMapPoints(std::vector<ORB_SLAM2::MapPoint *> map_points)
@@ -158,7 +158,7 @@ void Node::PublishPositionAsPoseStamped(cv::Mat position)
   tf2::Transform grasp_tf = TransformFromMat(position);
   geometry_msgs::msg::PoseStamped pose_msg;
   pose_msg.header.stamp = current_frame_time_;
-  pose_msg.header.frame_id = map_frame_id_param_;
+  pose_msg.header.frame_id = map_frame_id_param_ + "; " + std::to_string(proc_time_us);
   tf2::toMsg(grasp_tf, pose_msg.pose);
   pose_publisher_->publish(pose_msg);
 }

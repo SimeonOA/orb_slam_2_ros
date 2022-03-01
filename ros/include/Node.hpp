@@ -78,6 +78,7 @@ protected:
   ORB_SLAM2::System * orb_slam_;
   rclcpp::Time current_frame_time_;
   std::shared_ptr<image_transport::ImageTransport> image_transport_;
+  long proc_time_us;
 
 private:
   void PublishMapPoints(std::vector<ORB_SLAM2::MapPoint *> map_points);

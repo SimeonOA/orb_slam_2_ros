@@ -20,6 +20,8 @@
 
 #include "RGBDNode.hpp"
 
+using namespace std::chrono;
+
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
@@ -72,6 +74,8 @@ void RGBDNode::ImageCallback(
     return;
   }
 
+  auto start = high_resolution_clock::now();
+
   // Copy the ros image message to cv::Mat.
   cv_bridge::CvImageConstPtr cv_ptrRGB;
   try {
@@ -94,5 +98,6 @@ void RGBDNode::ImageCallback(
   rclcpp::Time msg_time = cv_ptrRGB->header.stamp;
   orb_slam_->TrackRGBD(cv_ptrRGB->image, cv_ptrD->image, msg_time.seconds());
 
+  proc_time_us = std::chrono::duration_cast<std::chrono::microseconds>(high_resolution_clock::now() - start).count();
   Update();
 }
