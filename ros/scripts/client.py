@@ -91,6 +91,8 @@ class SLAMClient(Node):
     def add_pose(self, msg):
         self.proc_times[len(self.poses)] = int(msg.header.frame_id.split(";")[-1]) / 1e6
         self.rt_times[len(self.poses)] = default_timer() - self.rt_times[len(self.poses)]
+        np.save("/output/proc_times.npy", self.proc_times)
+        np.save("/output/rt_times.npy", self.rt_times)
         self.poses.append(ReferenceFrame(np.array([msg.pose.position.x, msg.pose.position.y, msg.pose.position.z]),
                                          np.array([msg.pose.orientation.w, msg.pose.orientation.x, msg.pose.orientation.y, msg.pose.orientation.z])))
         
@@ -211,8 +213,6 @@ if __name__ == "__main__":
     ax.set_title("Camera Motion")
     plt.tight_layout()
     plt.savefig("/output/fig.png")
-    np.save("/output/proc_times.npy", client.proc_times)
-    np.save("/output/rt_times.npy", client.rt_times)
 
     client.destroy_node()
     rclpy.shutdown()
