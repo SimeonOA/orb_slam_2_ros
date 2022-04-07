@@ -3,7 +3,7 @@ Using VSLAM with FogROS2
 
 This is a tutorial walkthrough for running VSLAM with FogROS2.
 
-1. Make sure you have [FogROS2](https://github.com/BerkeleyAutomation/FogROS2) installed.Instructions can be found in the [README](https://github.com/BerkeleyAutomation/FogROS2/blob/main/README.md)
+1. Make sure you have [FogROS2](https://github.com/BerkeleyAutomation/FogROS2) installed. Instructions can be found in the [README](https://github.com/BerkeleyAutomation/FogROS2/blob/main/README.md) and [INSTALL](https://github.com/BerkeleyAutomation/FogROS2/blob/main/INSTALL.md)
 
 2. Client
 ```
